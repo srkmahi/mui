@@ -1,4 +1,5 @@
-import { Box, CssBaseline } from "@mui/material"
+import { CssBaseline } from "@mui/material"
+import Box from "@mui/material/Box"
 import { type FC, useCallback, useEffect, useRef, useState } from "react"
 import { LayoutProvider } from "./context/LayoutContext"
 import { LayoutInner } from "./LayoutInner"

@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import Box from "@mui/material/Box"
 import { type FC } from "react"
 import { SCROLLBAR_STYLES } from "../constants"
 import type { ScrollableContainerProps } from "../types"

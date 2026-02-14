@@ -1,4 +1,5 @@
-import { Box, Paper } from "@mui/material"
+import Box from "@mui/material/Box"
+import Paper from "@mui/material/Paper"
 import { type FC } from "react"
 import { TRANSITION_DURATION, TRANSITION_EASING } from "../../constants"
 import { useLayoutContext } from "../../context/useLayoutContext"

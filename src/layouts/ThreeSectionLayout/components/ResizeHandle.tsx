@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import Box from "@mui/material/Box"
 import { type FC } from "react"
 import { RESIZE_HANDLE_WIDTH, TRANSITION_DURATION } from "../constants"
 import { useResizable } from "../hooks/useResizable"

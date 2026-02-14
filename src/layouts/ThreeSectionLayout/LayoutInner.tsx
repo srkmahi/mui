@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import Box from "@mui/material/Box"
 import { type FC, type ReactNode } from "react"
 import { ResizeHandle } from "./components/ResizeHandle"
 import { Section1Card } from "./components/Section1/Section1Card"

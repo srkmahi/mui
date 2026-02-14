@@ -1,7 +1,10 @@
 import ChatIcon from "@mui/icons-material/Chat"
 import InfoIcon from "@mui/icons-material/Info"
 import NotificationsIcon from "@mui/icons-material/Notifications"
-import { Box, Button, Chip, Typography } from "@mui/material"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Chip from "@mui/material/Chip"
+import Typography from "@mui/material/Typography"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { type FC } from "react"
 
