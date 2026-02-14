@@ -1,27 +1,19 @@
-/**
- * SECTION 2 MENU REGISTRY
- *
- * To add a new panel to Section 2:
- * 1. Create your panel component in src/features/section2Panels/
- *    - It must accept PanelComponentProps
- * 2. Import it here
- * 3. Add a new MenuItemDefinition to the array
- *
- * The component will automatically appear in the Section 2 icon menu
- * and its content area when selected.
- */
-
+import { lazy } from "react"
 import type { MenuItemDefinition } from "../types"
 
-// Import icons
 import ChatIcon from "@mui/icons-material/Chat"
 import FolderIcon from "@mui/icons-material/Folder"
 import SettingsIcon from "@mui/icons-material/Settings"
 
-// Import panel components
-import { ChatPanel } from "../../../features/section2Panels/ChatPanel"
-import { FilesPanel } from "../../../features/section2Panels/FilesPanel"
-import { SettingsPanel } from "../../../features/section2Panels/SettingsPanel"
+const ChatPanel = lazy(() =>
+    import("../../../features/section2Panels/ChatPanel").then((m) => ({ default: m.ChatPanel })),
+)
+const FilesPanel = lazy(() =>
+    import("../../../features/section2Panels/FilesPanel").then((m) => ({ default: m.FilesPanel })),
+)
+const SettingsPanel = lazy(() =>
+    import("../../../features/section2Panels/SettingsPanel").then((m) => ({ default: m.SettingsPanel })),
+)
 
 export const section2MenuItems: MenuItemDefinition[] = [
     {

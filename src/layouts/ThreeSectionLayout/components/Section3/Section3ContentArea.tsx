@@ -1,11 +1,23 @@
 import Box from "@mui/material/Box"
-import CircularProgress from "@mui/material/CircularProgress"
+import Skeleton from "@mui/material/Skeleton"
+import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import { type FC, Suspense } from "react"
 import { TRANSITION_DURATION, TRANSITION_EASING } from "../../constants"
 import { useLayoutContext } from "../../context/useLayoutContext"
 import type { ContentAreaProps } from "../../types"
 import { ScrollableContainer } from "../ScrollableContainer"
+
+const PanelSkeleton: FC = () => (
+    <Stack spacing={1.5} sx={{ p: 2 }}>
+        <Skeleton variant="text" width="60%" height={28} />
+        <Skeleton variant="text" width="100%" height={20} />
+        <Skeleton variant="text" width="100%" height={20} />
+        <Skeleton variant="text" width="80%" height={20} />
+        <Skeleton variant="rectangular" width="100%" height={120} sx={{ borderRadius: 1 }} />
+        <Skeleton variant="text" width="40%" height={20} />
+    </Stack>
+)
 
 export const Section3ContentArea: FC<ContentAreaProps> = ({ activeMenuItem, isExpanded, width }) => {
     const { selectMenuItem, isResizing } = useLayoutContext()
@@ -37,7 +49,6 @@ export const Section3ContentArea: FC<ContentAreaProps> = ({ activeMenuItem, isEx
                         flexDirection: "column",
                     }}
                 >
-                    {/* Content Header */}
                     <Box
                         sx={{
                             px: 2,
@@ -55,34 +66,23 @@ export const Section3ContentArea: FC<ContentAreaProps> = ({ activeMenuItem, isEx
                         </Typography>
                     </Box>
 
-                    {/* Content Body */}
                     <ScrollableContainer>
-                        <Box sx={{ p: 2 }}>
-                            {ActiveComponent ? (
-                                <Suspense
-                                    fallback={
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                justifyContent: "center",
-                                                p: 4,
-                                            }}
-                                        >
-                                            <CircularProgress size={24} />
-                                        </Box>
-                                    }
-                                >
+                        {ActiveComponent ? (
+                            <Suspense fallback={<PanelSkeleton />}>
+                                <Box sx={{ p: 2 }}>
                                     <ActiveComponent
                                         menuItemId={activeMenuItem!.id}
                                         onSelectOtherSection={(targetSection, menuItemId) =>
                                             selectMenuItem(targetSection, menuItemId)
                                         }
                                     />
-                                </Suspense>
-                            ) : (
+                                </Box>
+                            </Suspense>
+                        ) : (
+                            <Box sx={{ p: 2 }}>
                                 <Typography color="text.secondary">Select an item from the menu</Typography>
-                            )}
-                        </Box>
+                            </Box>
+                        )}
                     </ScrollableContainer>
                 </Box>
             )}

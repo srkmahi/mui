@@ -16,8 +16,7 @@ export function useResizable(position: ResizeHandlePosition): UseResizableReturn
     const stateRef = useRef(state)
     const containerWidthRef = useRef(containerWidth)
     const dispatchRef = useRef(dispatch)
-
-    // Refs for the event handlers themselves so we can remove them reliably
+    const rafIdRef = useRef<number | null>(null)
     const handleMouseMoveRef = useRef<((e: MouseEvent) => void) | null>(null)
     const handleMouseUpRef = useRef<(() => void) | null>(null)
 
@@ -37,6 +36,10 @@ export function useResizable(position: ResizeHandlePosition): UseResizableReturn
         setIsResizing(false)
         document.body.style.cursor = ""
         document.body.style.userSelect = ""
+        if (rafIdRef.current !== null) {
+            cancelAnimationFrame(rafIdRef.current)
+            rafIdRef.current = null
+        }
         if (handleMouseMoveRef.current) {
             document.removeEventListener("mousemove", handleMouseMoveRef.current)
         }
@@ -57,8 +60,11 @@ export function useResizable(position: ResizeHandlePosition): UseResizableReturn
             document.body.style.cursor = "col-resize"
             document.body.style.userSelect = "none"
 
-            const onMouseMove = (moveEvent: MouseEvent) => {
-                const deltaX = moveEvent.clientX - startXRef.current
+            let latestClientX = e.clientX
+
+            const processResize = () => {
+                rafIdRef.current = null
+                const deltaX = latestClientX - startXRef.current
                 const currentState = stateRef.current
                 const cw = containerWidthRef.current
 
@@ -93,6 +99,13 @@ export function useResizable(position: ResizeHandlePosition): UseResizableReturn
                 }
             }
 
+            const onMouseMove = (moveEvent: MouseEvent) => {
+                latestClientX = moveEvent.clientX
+                if (rafIdRef.current === null) {
+                    rafIdRef.current = requestAnimationFrame(processResize)
+                }
+            }
+
             const onMouseUp = () => {
                 cleanup()
             }
@@ -106,7 +119,6 @@ export function useResizable(position: ResizeHandlePosition): UseResizableReturn
         [position, computedWidths, setIsResizing, cleanup],
     )
 
-    // Cleanup on unmount
     useEffect(() => {
         return () => {
             cleanup()

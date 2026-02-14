@@ -1,5 +1,5 @@
-import { type SvgIconComponent } from "@mui/icons-material"
-import { type ComponentType, type ReactNode } from "react"
+import type { SvgIconComponent } from "@mui/icons-material"
+import type { ComponentType, ReactNode } from "react"
 
 // ─── Menu Item Registry Types ───────────────────────────────────────────────
 
@@ -103,6 +103,8 @@ export interface LayoutContextValue {
     containerWidth: number
     /** Whether a resize is in progress */
     isResizing: boolean
+    /** Set resize state */
+    setIsResizing: (resizing: boolean) => void
 }
 
 export interface ComputedWidths {
@@ -175,17 +177,4 @@ export interface ContentAreaProps {
 export interface ScrollableContainerProps {
     children: ReactNode
     maxHeight?: string | number
-}
-
-export interface LayoutContextValue {
-    state: LayoutState
-    dispatch: React.Dispatch<LayoutAction>
-    selectMenuItem: (section: "section2" | "section3", menuItemId: string) => void
-    toggleSection: (section: "section2" | "section3") => void
-    computedWidths: ComputedWidths
-    section2MenuItems: MenuItemDefinition[]
-    section3MenuItems: MenuItemDefinition[]
-    containerWidth: number
-    isResizing: boolean
-    setIsResizing: (resizing: boolean) => void
 }

@@ -5,23 +5,56 @@ import { LayoutProvider } from "./context/LayoutContext"
 import { LayoutInner } from "./LayoutInner"
 import type { ThreeSectionLayoutProps } from "./types"
 
+/** Minimum pixel change to trigger a state update */
+const RESIZE_THRESHOLD = 1
+
 export const ThreeSectionLayout: FC<ThreeSectionLayoutProps> = (props) => {
     const containerRef = useRef<HTMLDivElement>(null)
     const [containerWidth, setContainerWidth] = useState(0)
+    const rafIdRef = useRef<number | null>(null)
+    const lastWidthRef = useRef(0)
 
-    const updateWidth = useCallback(() => {
-        if (containerRef.current) {
-            setContainerWidth(containerRef.current.offsetWidth)
+    const updateWidth = useCallback((entries: ResizeObserverEntry[]) => {
+        if (rafIdRef.current !== null) {
+            cancelAnimationFrame(rafIdRef.current)
         }
+
+        rafIdRef.current = requestAnimationFrame(() => {
+            rafIdRef.current = null
+
+            // Use contentRect from ResizeObserver entry directly (avoids forced reflow)
+            const entry = entries[0]
+            if (!entry) return
+
+            const newWidth = Math.round(entry.contentRect.width)
+
+            // Only setState if width changed beyond threshold
+            if (Math.abs(newWidth - lastWidthRef.current) >= RESIZE_THRESHOLD) {
+                lastWidthRef.current = newWidth
+                setContainerWidth(newWidth)
+            }
+        })
     }, [])
 
     useEffect(() => {
-        updateWidth()
-        const resizeObserver = new ResizeObserver(updateWidth)
+        // Synchronous initial measurement
         if (containerRef.current) {
-            resizeObserver.observe(containerRef.current)
+            const initialWidth = Math.round(containerRef.current.offsetWidth)
+            lastWidthRef.current = initialWidth
+            setContainerWidth(initialWidth)
         }
-        return () => resizeObserver.disconnect()
+
+        const observer = new ResizeObserver(updateWidth)
+        if (containerRef.current) {
+            observer.observe(containerRef.current)
+        }
+
+        return () => {
+            observer.disconnect()
+            if (rafIdRef.current !== null) {
+                cancelAnimationFrame(rafIdRef.current)
+            }
+        }
     }, [updateWidth])
 
     return (

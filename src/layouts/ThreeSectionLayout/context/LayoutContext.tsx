@@ -1,4 +1,4 @@
-import { useCallback, useReducer, useState, type FC, type PropsWithChildren } from "react"
+import { useCallback, useMemo, useReducer, useState, type FC, type PropsWithChildren } from "react"
 import {
     DEFAULT_EXPANDED_WIDTH,
     ICON_PANEL_WIDTH,
@@ -262,20 +262,34 @@ export const LayoutProvider: FC<LayoutProviderProps> = ({
         })
     }, [])
 
-    const computedWidths = computeWidths(state, containerWidth)
+    const computedWidths = useMemo(() => computeWidths(state, containerWidth), [state, containerWidth])
 
-    const value: LayoutContextValue = {
-        state,
-        dispatch,
-        selectMenuItem,
-        toggleSection,
-        computedWidths,
-        section2MenuItems,
-        section3MenuItems,
-        containerWidth,
-        isResizing,
-        setIsResizing,
-    }
+    const value = useMemo<LayoutContextValue>(
+        () => ({
+            state,
+            dispatch,
+            selectMenuItem,
+            toggleSection,
+            computedWidths,
+            section2MenuItems,
+            section3MenuItems,
+            containerWidth,
+            isResizing,
+            setIsResizing,
+        }),
+        [
+            state,
+            dispatch,
+            selectMenuItem,
+            toggleSection,
+            computedWidths,
+            section2MenuItems,
+            section3MenuItems,
+            containerWidth,
+            isResizing,
+            setIsResizing,
+        ],
+    )
 
     return <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>
 }

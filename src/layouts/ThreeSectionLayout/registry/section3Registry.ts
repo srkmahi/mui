@@ -1,24 +1,19 @@
-/**
- * SECTION 3 MENU REGISTRY
- *
- * To add a new panel to Section 3:
- * 1. Create your panel component in src/features/section3Panels/
- *    - It must accept PanelComponentProps
- * 2. Import it here
- * 3. Add a new MenuItemDefinition to the array
- */
-
+import { lazy } from "react"
 import type { MenuItemDefinition } from "../types"
 
-// Import icons
 import HistoryIcon from "@mui/icons-material/History"
 import InfoIcon from "@mui/icons-material/Info"
 import NotificationsIcon from "@mui/icons-material/Notifications"
 
-// Import panel components
-import { HistoryPanel } from "../../../features/section3Panels/HistoryPanel"
-import { NotificationsPanel } from "../../../features/section3Panels/NotificationsPanel"
-import { PropertiesPanel } from "../../../features/section3Panels/PropertiesPanel"
+const PropertiesPanel = lazy(() =>
+    import("../../../features/section3Panels/PropertiesPanel").then((m) => ({ default: m.PropertiesPanel })),
+)
+const HistoryPanel = lazy(() =>
+    import("../../../features/section3Panels/HistoryPanel").then((m) => ({ default: m.HistoryPanel })),
+)
+const NotificationsPanel = lazy(() =>
+    import("../../../features/section3Panels/NotificationsPanel").then((m) => ({ default: m.NotificationsPanel })),
+)
 
 export const section3MenuItems: MenuItemDefinition[] = [
     {
