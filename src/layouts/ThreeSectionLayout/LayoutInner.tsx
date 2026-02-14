@@ -39,13 +39,7 @@ export const LayoutInner: FC<LayoutInnerProps> = ({
                 overflow: "hidden",
             }}
         >
-            {/* Section 2: Left Drawer (Icon Panel LEFT, Content RIGHT) */}
-            <Section2Drawer section="section2" menuItems={section2MenuItems} />
-
-            {/* Resize Handle between Section 2 and Section 1 */}
-            <ResizeHandle position="left" visible={s2Expanded} />
-
-            {/* Section 1: Main Card */}
+            {/* Section 1: Main Card (always first) */}
             <Section1Card
                 header={section1Header}
                 content={section1Content}
@@ -53,7 +47,13 @@ export const LayoutInner: FC<LayoutInnerProps> = ({
                 actions={section1Actions}
             />
 
-            {/* Resize Handle between Section 1 and Section 3 */}
+            {/* Resize Handle between Section 1 and Section 2 */}
+            <ResizeHandle position="left" visible={s2Expanded} />
+
+            {/* Section 2: Middle Drawer (Icon Panel LEFT, Content RIGHT) */}
+            <Section2Drawer section="section2" menuItems={section2MenuItems} />
+
+            {/* Resize Handle between Section 2 and Section 3 */}
             <ResizeHandle position="right" visible={s3Expanded} />
 
             {/* Section 3: Right Drawer (Content LEFT, Icon Panel RIGHT) */}

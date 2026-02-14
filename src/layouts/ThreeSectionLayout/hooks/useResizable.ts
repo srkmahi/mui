@@ -63,7 +63,7 @@ export function useResizable(position: ResizeHandlePosition): UseResizableReturn
                 const cw = containerWidthRef.current
 
                 if (position === "left") {
-                    const newS2Width = startWidthS2Ref.current + deltaX
+                    const newS2Width = startWidthS2Ref.current - deltaX
                     const s2ContentWidth = newS2Width - ICON_PANEL_WIDTH
                     const s3Expanded = currentState.section3.state === "expanded"
                     const s3TotalWidth = s3Expanded ? currentState.section3.width : ICON_PANEL_WIDTH

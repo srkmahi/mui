@@ -5,13 +5,13 @@ export const ICON_PANEL_WIDTH = 48
 export const MIN_CONTENT_WIDTH = 300
 
 /** Minimum width for section 1 */
-export const MIN_SECTION1_WIDTH = 200
+export const MIN_SECTION1_WIDTH = 400
 
 /** Width of the resize handle gutter */
 export const RESIZE_HANDLE_WIDTH = 6
 
 /** Transition duration in ms */
-export const TRANSITION_DURATION = 225
+export const TRANSITION_DURATION = 10
 
 /** Transition easing */
 export const TRANSITION_EASING = "cubic-bezier(0.4, 0, 0.2, 1)"

@@ -18,7 +18,6 @@ export const Section2Drawer: FC<DrawerProps> = ({ menuItems }) => {
         if (isExpanded) {
             toggleSection("section2")
         } else {
-            // If collapsing but no active item, select first item
             const firstItem = menuItems[0]
             if (firstItem) {
                 selectMenuItem("section2", firstItem.id)
@@ -44,7 +43,7 @@ export const Section2Drawer: FC<DrawerProps> = ({ menuItems }) => {
                 backgroundColor: "background.paper",
             }}
         >
-            {/* Section 2: Icon Menu on LEFT, Content on RIGHT */}
+            {/* Section 2 (L→R): Icon Panel on LEFT, Content on RIGHT */}
             <Section2IconMenu
                 section="section2"
                 menuItems={menuItems}

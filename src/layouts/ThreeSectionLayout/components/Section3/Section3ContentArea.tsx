@@ -8,9 +8,13 @@ import type { ContentAreaProps } from "../../types"
 import { ScrollableContainer } from "../ScrollableContainer"
 
 export const Section3ContentArea: FC<ContentAreaProps> = ({ activeMenuItem, isExpanded, width }) => {
-    const { selectMenuItem } = useLayoutContext()
+    const { selectMenuItem, isResizing } = useLayoutContext()
 
     const ActiveComponent = activeMenuItem?.component
+
+    const widthTransition = isResizing ? "none" : `width ${TRANSITION_DURATION}ms ${TRANSITION_EASING}`
+
+    const borderTransition = isResizing ? "none" : `border ${TRANSITION_DURATION}ms ${TRANSITION_EASING}`
 
     return (
         <Box
@@ -19,7 +23,7 @@ export const Section3ContentArea: FC<ContentAreaProps> = ({ activeMenuItem, isEx
                 minWidth: 0,
                 height: "100%",
                 overflow: "hidden",
-                transition: `width ${TRANSITION_DURATION}ms ${TRANSITION_EASING}`,
+                transition: `${widthTransition}, ${borderTransition}`,
                 borderLeft: isExpanded ? 1 : 0,
                 borderColor: "divider",
             }}
