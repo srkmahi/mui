@@ -5,7 +5,6 @@ import { LayoutProvider } from "./context/LayoutContext"
 import { LayoutInner } from "./LayoutInner"
 import type { ThreeSectionLayoutProps } from "./types"
 
-/** Minimum pixel change to trigger a state update */
 const RESIZE_THRESHOLD = 1
 
 export const ThreeSectionLayout: FC<ThreeSectionLayoutProps> = (props) => {
@@ -21,14 +20,10 @@ export const ThreeSectionLayout: FC<ThreeSectionLayoutProps> = (props) => {
 
         rafIdRef.current = requestAnimationFrame(() => {
             rafIdRef.current = null
-
-            // Use contentRect from ResizeObserver entry directly (avoids forced reflow)
             const entry = entries[0]
             if (!entry) return
 
             const newWidth = Math.round(entry.contentRect.width)
-
-            // Only setState if width changed beyond threshold
             if (Math.abs(newWidth - lastWidthRef.current) >= RESIZE_THRESHOLD) {
                 lastWidthRef.current = newWidth
                 setContainerWidth(newWidth)
@@ -37,7 +32,6 @@ export const ThreeSectionLayout: FC<ThreeSectionLayoutProps> = (props) => {
     }, [])
 
     useEffect(() => {
-        // Synchronous initial measurement
         if (containerRef.current) {
             const initialWidth = Math.round(containerRef.current.offsetWidth)
             lastWidthRef.current = initialWidth
@@ -65,6 +59,7 @@ export const ThreeSectionLayout: FC<ThreeSectionLayoutProps> = (props) => {
                 sx={{
                     width: "100vw",
                     height: "100vh",
+                    padding: "16px",
                     overflow: "hidden",
                     display: "flex",
                     flexDirection: "row",
@@ -78,10 +73,7 @@ export const ThreeSectionLayout: FC<ThreeSectionLayoutProps> = (props) => {
                         containerWidth={containerWidth}
                     >
                         <LayoutInner
-                            section1Header={props.section1Header}
                             section1Content={props.section1Content}
-                            section1Footer={props.section1Footer}
-                            section1Actions={props.section1Actions}
                             section2MenuItems={props.section2MenuItems}
                             section3MenuItems={props.section3MenuItems}
                         />

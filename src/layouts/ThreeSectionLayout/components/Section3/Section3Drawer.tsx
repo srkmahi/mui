@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box"
+import Card from "@mui/material/Card"
 import { type FC } from "react"
 import { TRANSITION_DURATION, TRANSITION_EASING } from "../../constants"
 import { useLayoutContext } from "../../context/useLayoutContext"
@@ -32,7 +32,8 @@ export const Section3Drawer: FC<DrawerProps> = ({ menuItems }) => {
     }
 
     return (
-        <Box
+        <Card
+            variant="outlined"
             sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -58,6 +59,6 @@ export const Section3Drawer: FC<DrawerProps> = ({ menuItems }) => {
                 onToggle={handleToggle}
                 onSelectItem={handleSelectItem}
             />
-        </Box>
+        </Card>
     )
 }

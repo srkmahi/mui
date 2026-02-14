@@ -13,13 +13,13 @@ import { LayoutContext } from "./LayoutContextDef"
 
 const createInitialState = (overrides?: Partial<LayoutState>): LayoutState => ({
     section2: {
-        state: "collapsed",
-        activeMenuItemId: null,
+        state: "expanded",
+        activeMenuItemId: "s2-chat",
         width: DEFAULT_EXPANDED_WIDTH,
     },
     section3: {
-        state: "collapsed",
-        activeMenuItemId: null,
+        state: "expanded",
+        activeMenuItemId: "s3-properties",
         width: DEFAULT_EXPANDED_WIDTH,
     },
     section1StoredWidth: null,

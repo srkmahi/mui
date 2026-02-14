@@ -36,7 +36,6 @@ export const Section2ContentArea: FC<ContentAreaProps> = ({ activeMenuItem, isEx
                 height: "100%",
                 overflow: "hidden",
                 transition: `${widthTransition}, ${borderTransition}`,
-                borderRight: isExpanded ? 1 : 0,
                 borderColor: "divider",
             }}
         >

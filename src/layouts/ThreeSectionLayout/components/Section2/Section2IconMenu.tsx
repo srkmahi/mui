@@ -25,7 +25,6 @@ export const Section2IconMenu: FC<IconMenuPanelProps> = ({
                 flexDirection: "column",
                 alignItems: "center",
                 py: 1,
-                borderLeft: 1,
                 borderRight: 1,
                 borderColor: "divider",
                 backgroundColor: "background.paper",
