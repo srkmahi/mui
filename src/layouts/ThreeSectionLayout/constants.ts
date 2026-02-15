@@ -10,8 +10,11 @@ export const MIN_SECTION1_WIDTH = 400
 /** Width of the resize handle gutter */
 export const RESIZE_HANDLE_WIDTH = 6
 
+/** Width of the thin divider between sections when collapsed */
+export const DIVIDER_WIDTH = 6
+
 /** Transition duration in ms */
-export const TRANSITION_DURATION = 10
+export const TRANSITION_DURATION = 15
 
 /** Transition easing */
 export const TRANSITION_EASING = "cubic-bezier(0.4, 0, 0.2, 1)"
@@ -23,10 +26,8 @@ export const DEFAULT_EXPANDED_WIDTH = ICON_PANEL_WIDTH + MIN_CONTENT_WIDTH
 export const SCROLLBAR_STYLES = {
     overflowY: "hidden",
     overflowX: "hidden",
-    // Thin scrollbar config (Firefox)
     scrollbarWidth: "thin",
     scrollbarColor: "transparent transparent",
-    // Webkit scrollbar - hidden by default
     "&::-webkit-scrollbar": {
         width: "6px",
     },
@@ -38,7 +39,6 @@ export const SCROLLBAR_STYLES = {
         borderRadius: "3px",
         transition: "background 0.2s ease",
     },
-    // On hover, show scrollbar and allow scrolling
     "&:hover": {
         overflowY: "auto",
         scrollbarColor: "rgba(0,0,0,0.2) transparent",

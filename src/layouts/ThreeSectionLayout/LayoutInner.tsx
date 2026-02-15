@@ -13,6 +13,17 @@ interface LayoutInnerProps {
     section3MenuItems: MenuItemDefinition[]
 }
 
+const SectionDivider: FC = () => (
+    <Box
+        sx={{
+            width: "6px",
+            minWidth: "6px",
+            height: "100%",
+            flexShrink: 0,
+        }}
+    />
+)
+
 export const LayoutInner: FC<LayoutInnerProps> = ({ section1Content, section2MenuItems, section3MenuItems }) => {
     const { state } = useLayoutContext()
 
@@ -31,11 +42,11 @@ export const LayoutInner: FC<LayoutInnerProps> = ({ section1Content, section2Men
         >
             <Section1Card>{section1Content}</Section1Card>
 
-            <ResizeHandle position="left" visible={s2Expanded} />
+            {s2Expanded ? <ResizeHandle position="left" visible /> : <SectionDivider />}
 
             <Section2Drawer section="section2" menuItems={section2MenuItems} />
 
-            <ResizeHandle position="right" visible={s3Expanded} />
+            {s3Expanded ? <ResizeHandle position="right" visible /> : <SectionDivider />}
 
             <Section3Drawer section="section3" menuItems={section3MenuItems} />
         </Box>

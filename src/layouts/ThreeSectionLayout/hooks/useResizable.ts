@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef } from "react"
-import { ICON_PANEL_WIDTH, MIN_CONTENT_WIDTH, MIN_SECTION1_WIDTH, RESIZE_HANDLE_WIDTH } from "../constants"
+import {
+    DIVIDER_WIDTH,
+    ICON_PANEL_WIDTH,
+    MIN_CONTENT_WIDTH,
+    MIN_SECTION1_WIDTH,
+    RESIZE_HANDLE_WIDTH,
+} from "../constants"
 import { useLayoutContext } from "../context/useLayoutContext"
 import type { ResizeHandlePosition } from "../types"
 
@@ -17,6 +23,7 @@ export function useResizable(position: ResizeHandlePosition): UseResizableReturn
     const containerWidthRef = useRef(containerWidth)
     const dispatchRef = useRef(dispatch)
     const rafIdRef = useRef<number | null>(null)
+
     const handleMouseMoveRef = useRef<((e: MouseEvent) => void) | null>(null)
     const handleMouseUpRef = useRef<(() => void) | null>(null)
 
@@ -73,8 +80,8 @@ export function useResizable(position: ResizeHandlePosition): UseResizableReturn
                     const s2ContentWidth = newS2Width - ICON_PANEL_WIDTH
                     const s3Expanded = currentState.section3.state === "expanded"
                     const s3TotalWidth = s3Expanded ? currentState.section3.width : ICON_PANEL_WIDTH
-                    const handleWidth = RESIZE_HANDLE_WIDTH + (s3Expanded ? RESIZE_HANDLE_WIDTH : 0)
-                    const section1Width = cw - newS2Width - s3TotalWidth - handleWidth
+                    const totalGapWidth = RESIZE_HANDLE_WIDTH + (s3Expanded ? RESIZE_HANDLE_WIDTH : DIVIDER_WIDTH)
+                    const section1Width = cw - newS2Width - s3TotalWidth - totalGapWidth
 
                     if (s2ContentWidth >= MIN_CONTENT_WIDTH && section1Width >= MIN_SECTION1_WIDTH) {
                         dispatchRef.current({
@@ -87,8 +94,8 @@ export function useResizable(position: ResizeHandlePosition): UseResizableReturn
                     const s3ContentWidth = newS3Width - ICON_PANEL_WIDTH
                     const s2Expanded = currentState.section2.state === "expanded"
                     const s2TotalWidth = s2Expanded ? currentState.section2.width : ICON_PANEL_WIDTH
-                    const handleWidth = RESIZE_HANDLE_WIDTH + (s2Expanded ? RESIZE_HANDLE_WIDTH : 0)
-                    const section1Width = cw - s2TotalWidth - newS3Width - handleWidth
+                    const totalGapWidth = RESIZE_HANDLE_WIDTH + (s2Expanded ? RESIZE_HANDLE_WIDTH : DIVIDER_WIDTH)
+                    const section1Width = cw - s2TotalWidth - newS3Width - totalGapWidth
 
                     if (s3ContentWidth >= MIN_CONTENT_WIDTH && section1Width >= MIN_SECTION1_WIDTH) {
                         dispatchRef.current({

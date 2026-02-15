@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useReducer, useState, type FC, type PropsWithChildren } from "react"
 import {
     DEFAULT_EXPANDED_WIDTH,
+    DIVIDER_WIDTH,
     ICON_PANEL_WIDTH,
     MIN_CONTENT_WIDTH,
     MIN_SECTION1_WIDTH,
@@ -8,8 +9,6 @@ import {
 } from "../constants"
 import type { ComputedWidths, LayoutAction, LayoutContextValue, LayoutState, MenuItemDefinition } from "../types"
 import { LayoutContext } from "./LayoutContextDef"
-
-// ─── Initial State ──────────────────────────────────────────────────────────
 
 const createInitialState = (overrides?: Partial<LayoutState>): LayoutState => ({
     section2: {
@@ -29,8 +28,6 @@ const createInitialState = (overrides?: Partial<LayoutState>): LayoutState => ({
     },
     ...overrides,
 })
-
-// ─── Reducer ────────────────────────────────────────────────────────────────
 
 function layoutReducer(state: LayoutState, action: LayoutAction): LayoutState {
     switch (action.type) {
@@ -165,8 +162,6 @@ function layoutReducer(state: LayoutState, action: LayoutAction): LayoutState {
     }
 }
 
-// ─── Compute Widths ─────────────────────────────────────────────────────────
-
 function computeWidths(state: LayoutState, containerWidth: number): ComputedWidths {
     const s2Expanded = state.section2.state === "expanded"
     const s3Expanded = state.section3.state === "expanded"
@@ -175,11 +170,11 @@ function computeWidths(state: LayoutState, containerWidth: number): ComputedWidt
     const s3IconPanel = ICON_PANEL_WIDTH
     const totalIconPanels = s2IconPanel + s3IconPanel
 
-    let totalHandleWidth = 0
-    if (s2Expanded) totalHandleWidth += RESIZE_HANDLE_WIDTH
-    if (s3Expanded) totalHandleWidth += RESIZE_HANDLE_WIDTH
+    const s2GapWidth = s2Expanded ? RESIZE_HANDLE_WIDTH : DIVIDER_WIDTH
+    const s3GapWidth = s3Expanded ? RESIZE_HANDLE_WIDTH : DIVIDER_WIDTH
+    const totalGapWidth = s2GapWidth + s3GapWidth
 
-    const availableForContent = containerWidth - totalIconPanels - totalHandleWidth
+    const availableForContent = containerWidth - totalIconPanels - totalGapWidth
 
     let s2ContentWidth = 0
     let s3ContentWidth = 0
@@ -229,8 +224,6 @@ function computeWidths(state: LayoutState, containerWidth: number): ComputedWidt
         section3Content: s3ContentWidth,
     }
 }
-
-// ─── Provider (ONLY component export from this file) ────────────────────────
 
 interface LayoutProviderProps extends PropsWithChildren {
     section2MenuItems: MenuItemDefinition[]
