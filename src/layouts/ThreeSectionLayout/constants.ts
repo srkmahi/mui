@@ -19,8 +19,21 @@ export const TRANSITION_DURATION = 15
 /** Transition easing */
 export const TRANSITION_EASING = "cubic-bezier(0.4, 0, 0.2, 1)"
 
-/** Default expanded drawer width (icon panel + content) */
-export const DEFAULT_EXPANDED_WIDTH = ICON_PANEL_WIDTH + MIN_CONTENT_WIDTH
+/**
+ * Section 2 (middle drawer):
+ */
+export const DEFAULT_SECTION2_WIDTH_PERCENT = 20
+
+/**
+ * Section 3 (right drawer):
+ */
+export const DEFAULT_SECTION3_WIDTH_PERCENT = 20
+
+/**
+ * Maximum percentage a single drawer can occupy.
+ * Prevents a drawer from taking over the entire screen.
+ */
+export const MAX_DRAWER_WIDTH_PERCENT = 40
 
 /** Scrollbar styles for hover-only thin scrollbar */
 export const SCROLLBAR_STYLES = {

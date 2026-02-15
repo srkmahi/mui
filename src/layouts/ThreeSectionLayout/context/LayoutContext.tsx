@@ -1,8 +1,10 @@
 import { useCallback, useMemo, useReducer, useState, type FC, type PropsWithChildren } from "react"
 import {
-    DEFAULT_EXPANDED_WIDTH,
+    DEFAULT_SECTION2_WIDTH_PERCENT,
+    DEFAULT_SECTION3_WIDTH_PERCENT,
     DIVIDER_WIDTH,
     ICON_PANEL_WIDTH,
+    MAX_DRAWER_WIDTH_PERCENT,
     MIN_CONTENT_WIDTH,
     MIN_SECTION1_WIDTH,
     RESIZE_HANDLE_WIDTH,
@@ -10,16 +12,25 @@ import {
 import type { ComputedWidths, LayoutAction, LayoutContextValue, LayoutState, MenuItemDefinition } from "../types"
 import { LayoutContext } from "./LayoutContextDef"
 
-const createInitialState = (overrides?: Partial<LayoutState>): LayoutState => ({
+// ─── Initial State ──────────────────────────────────────────────────────────
+
+function resolveDrawerWidth(containerWidth: number, widthPercent: number): number {
+    const percentWidth = Math.round((containerWidth * widthPercent) / 100)
+    const minWidth = ICON_PANEL_WIDTH + MIN_CONTENT_WIDTH
+    const maxWidth = Math.round((containerWidth * MAX_DRAWER_WIDTH_PERCENT) / 100)
+    return Math.max(minWidth, Math.min(percentWidth, maxWidth))
+}
+
+const createInitialState = (containerWidth: number, overrides?: Partial<LayoutState>): LayoutState => ({
     section2: {
         state: "expanded",
         activeMenuItemId: "s2-chat",
-        width: DEFAULT_EXPANDED_WIDTH,
+        width: resolveDrawerWidth(containerWidth, DEFAULT_SECTION2_WIDTH_PERCENT),
     },
     section3: {
         state: "expanded",
         activeMenuItemId: "s3-properties",
-        width: DEFAULT_EXPANDED_WIDTH,
+        width: resolveDrawerWidth(containerWidth, DEFAULT_SECTION3_WIDTH_PERCENT),
     },
     section1StoredWidth: null,
     resizeRatios: {
@@ -239,7 +250,9 @@ export const LayoutProvider: FC<LayoutProviderProps> = ({
     initialState,
     containerWidth,
 }) => {
-    const [state, dispatch] = useReducer(layoutReducer, initialState, (init) => createInitialState(init))
+    const [state, dispatch] = useReducer(layoutReducer, undefined, () =>
+        createInitialState(containerWidth, initialState),
+    )
     const [isResizing, setIsResizing] = useState(false)
 
     const selectMenuItem = useCallback((section: "section2" | "section3", menuItemId: string) => {
