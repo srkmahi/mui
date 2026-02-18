@@ -8,7 +8,8 @@ import Typography from "@mui/material/Typography"
 import { type FC, useCallback, useEffect, useRef, useState } from "react"
 import { ICON_PANEL_OVERLAY_WIDTH, ICON_PANEL_WIDTH, SCROLLBAR_STYLES, TRANSITION_DURATION } from "../../constants"
 import type { IconMenuPanelProps } from "../../types"
-import { OverlayMenuItem, RailMenuItem } from "../IconMenuItems"
+import OverlayMenuItem from "../OverlayMenuItem"
+import RailMenuItem from "../RailMenuItem"
 
 const OVERLAY_LIST_SX = { flex: 1, ...SCROLLBAR_STYLES }
 
