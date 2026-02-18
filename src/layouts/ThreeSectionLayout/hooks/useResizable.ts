@@ -75,10 +75,13 @@ export function useResizable(position: ResizeHandlePosition): UseResizableReturn
                 const currentState = stateRef.current
                 const cw = containerWidthRef.current
 
+                // const s2Expanded = currentState.section2.state === "expanded"
+                const s3Expanded = currentState.section3.state === "expanded"
+
                 if (position === "left") {
                     const newS2Width = startWidthS2Ref.current - deltaX
                     const s2ContentWidth = newS2Width - ICON_PANEL_WIDTH
-                    const s3Expanded = currentState.section3.state === "expanded"
+
                     const s3TotalWidth = s3Expanded ? currentState.section3.width : ICON_PANEL_WIDTH
                     const totalGapWidth = RESIZE_HANDLE_WIDTH + (s3Expanded ? RESIZE_HANDLE_WIDTH : DIVIDER_WIDTH)
                     const section1Width = cw - newS2Width - s3TotalWidth - totalGapWidth
@@ -92,15 +95,19 @@ export function useResizable(position: ResizeHandlePosition): UseResizableReturn
                 } else {
                     const newS3Width = startWidthS3Ref.current - deltaX
                     const s3ContentWidth = newS3Width - ICON_PANEL_WIDTH
-                    const s2Expanded = currentState.section2.state === "expanded"
-                    const s2TotalWidth = s2Expanded ? currentState.section2.width : ICON_PANEL_WIDTH
-                    const totalGapWidth = RESIZE_HANDLE_WIDTH + (s2Expanded ? RESIZE_HANDLE_WIDTH : DIVIDER_WIDTH)
-                    const section1Width = cw - s2TotalWidth - newS3Width - totalGapWidth
 
-                    if (s3ContentWidth >= MIN_CONTENT_WIDTH && section1Width >= MIN_SECTION1_WIDTH) {
+                    // The total space for S2+S3 is fixed (S1 doesn't change)
+                    const totalS2S3 = startWidthS2Ref.current + startWidthS3Ref.current
+                    const newS2Width = totalS2S3 - newS3Width
+                    const s2ContentWidth = newS2Width - ICON_PANEL_WIDTH
+
+                    if (s3ContentWidth >= MIN_CONTENT_WIDTH && s2ContentWidth >= MIN_CONTENT_WIDTH) {
                         dispatchRef.current({
                             type: "RESIZE_SECTIONS",
-                            payload: { section3Width: newS3Width },
+                            payload: {
+                                section2Width: newS2Width,
+                                section3Width: newS3Width,
+                            },
                         })
                     }
                 }
