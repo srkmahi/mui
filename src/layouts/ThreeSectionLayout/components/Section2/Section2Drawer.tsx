@@ -44,8 +44,8 @@ export const Section2Drawer: FC<DrawerProps> = ({ menuItems }) => {
                 backgroundColor: "background.paper",
             }}
         >
-            {/* Section 2 (L→R): Icon Panel on LEFT, Content on RIGHT */}
             <Section2IconMenu
+                key={String(isExpanded)}
                 section="section2"
                 menuItems={menuItems}
                 activeItemId={section2.activeMenuItemId}

@@ -44,7 +44,6 @@ export const Section3Drawer: FC<DrawerProps> = ({ menuItems }) => {
                 backgroundColor: "background.paper",
             }}
         >
-            {/* Section 3: Content on LEFT, Icon Menu on RIGHT (RTL drawer) */}
             <Section3ContentArea
                 section="section3"
                 activeMenuItem={activeMenuItem}
@@ -52,6 +51,7 @@ export const Section3Drawer: FC<DrawerProps> = ({ menuItems }) => {
                 width={computedWidths.section3Content}
             />
             <Section3IconMenu
+                key={String(isExpanded)}
                 section="section3"
                 menuItems={menuItems}
                 activeItemId={section3.activeMenuItemId}

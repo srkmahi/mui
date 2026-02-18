@@ -1,6 +1,9 @@
 /** Width of the icon panel in collapsed/mini state */
 export const ICON_PANEL_WIDTH = 48
 
+/** Width of the label overlay that appears on rail hover */
+export const ICON_PANEL_OVERLAY_WIDTH = 160
+
 /** Minimum width of the content area when a drawer is expanded */
 export const MIN_CONTENT_WIDTH = 300
 

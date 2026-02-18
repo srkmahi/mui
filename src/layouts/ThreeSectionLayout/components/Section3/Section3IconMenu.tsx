@@ -1,12 +1,19 @@
 import MenuIcon from "@mui/icons-material/Menu"
-import Badge from "@mui/material/Badge"
 import Box from "@mui/material/Box"
 import Divider from "@mui/material/Divider"
+import Fade from "@mui/material/Fade"
 import IconButton from "@mui/material/IconButton"
 import Tooltip from "@mui/material/Tooltip"
-import { type FC } from "react"
-import { ICON_PANEL_WIDTH } from "../../constants"
+import Typography from "@mui/material/Typography"
+import { type FC, useCallback, useEffect, useRef, useState } from "react"
+import { ICON_PANEL_OVERLAY_WIDTH, ICON_PANEL_WIDTH, SCROLLBAR_STYLES, TRANSITION_DURATION } from "../../constants"
 import type { IconMenuPanelProps } from "../../types"
+import { OverlayMenuItem, RailMenuItem } from "../IconMenuItems"
+
+const OVERLAY_LIST_SX = { flex: 1, ...SCROLLBAR_STYLES }
+
+const HOVER_DELAY = 300
+const LEAVE_DELAY = 200
 
 export const Section3IconMenu: FC<IconMenuPanelProps> = ({
     menuItems,
@@ -15,59 +22,150 @@ export const Section3IconMenu: FC<IconMenuPanelProps> = ({
     onToggle,
     onSelectItem,
 }) => {
+    const [showOverlay, setShowOverlay] = useState(false)
+    const enterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+    useEffect(() => {
+        return () => {
+            if (enterTimerRef.current) clearTimeout(enterTimerRef.current)
+            if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current)
+        }
+    }, [])
+
+    const handleMouseEnter = useCallback(() => {
+        if (!isExpanded) return
+        if (leaveTimerRef.current) {
+            clearTimeout(leaveTimerRef.current)
+            leaveTimerRef.current = null
+        }
+        enterTimerRef.current = setTimeout(() => {
+            setShowOverlay(true)
+        }, HOVER_DELAY)
+    }, [isExpanded])
+
+    const handleMouseLeave = useCallback(() => {
+        if (enterTimerRef.current) {
+            clearTimeout(enterTimerRef.current)
+            enterTimerRef.current = null
+        }
+        leaveTimerRef.current = setTimeout(() => {
+            setShowOverlay(false)
+        }, LEAVE_DELAY)
+    }, [])
+
+    const handleItemClick = useCallback(
+        (itemId: string) => {
+            onSelectItem(itemId)
+            setShowOverlay(false)
+            if (enterTimerRef.current) {
+                clearTimeout(enterTimerRef.current)
+                enterTimerRef.current = null
+            }
+        },
+        [onSelectItem],
+    )
+
+    const overlayVisible = showOverlay && isExpanded
+
     return (
         <Box
-            sx={{
-                width: ICON_PANEL_WIDTH,
-                minWidth: ICON_PANEL_WIDTH,
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                py: 1,
-                borderLeft: 1,
-                borderColor: "divider",
-                backgroundColor: "background.paper",
-                flexShrink: 0,
-            }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            sx={{ position: "relative", height: "100%", flexShrink: 0 }}
         >
-            {/* Toggle button */}
-            <Tooltip title={isExpanded ? "Collapse" : "Expand"} placement="left">
-                <IconButton size="small" onClick={onToggle} sx={{ mb: 0.5 }}>
-                    <MenuIcon fontSize="small" />
-                </IconButton>
-            </Tooltip>
-
-            <Divider sx={{ width: "70%", my: 0.5 }} />
-
-            {/* Menu items */}
-            {menuItems.map((item) => (
-                <Tooltip key={item.id} title={item.label} placement="left">
-                    <span>
-                        <IconButton
-                            size="small"
-                            disabled={item.disabled}
-                            onClick={() => onSelectItem(item.id)}
+            <Fade in={overlayVisible} timeout={TRANSITION_DURATION} unmountOnExit>
+                <Box
+                    sx={{
+                        position: "absolute",
+                        top: 0,
+                        right: ICON_PANEL_WIDTH,
+                        width: ICON_PANEL_OVERLAY_WIDTH,
+                        height: "100%",
+                        backgroundColor: "background.paper",
+                        borderLeft: 1,
+                        borderColor: "divider",
+                        boxShadow: 4,
+                        zIndex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        pointerEvents: overlayVisible ? "auto" : "none",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            px: 1.5,
+                            py: 1,
+                            flexShrink: 0,
+                            display: "flex",
+                            alignItems: "center",
+                            minHeight: 42,
+                        }}
+                    >
+                        <Typography
+                            variant="caption"
+                            fontWeight={700}
                             sx={{
-                                my: 0.25,
-                                color: activeItemId === item.id ? "primary.main" : "text.secondary",
-                                backgroundColor: activeItemId === item.id ? "action.selected" : "transparent",
-                                "&:hover": {
-                                    backgroundColor: activeItemId === item.id ? "action.selected" : "action.hover",
-                                },
+                                textTransform: "uppercase",
+                                color: "text.secondary",
+                                letterSpacing: 0.5,
                             }}
                         >
-                            {item.badgeCount ? (
-                                <Badge badgeContent={item.badgeCount} color="error" max={99}>
-                                    <item.icon fontSize="small" />
-                                </Badge>
-                            ) : (
-                                <item.icon fontSize="small" />
-                            )}
-                        </IconButton>
-                    </span>
+                            Features
+                        </Typography>
+                    </Box>
+
+                    <Divider />
+
+                    <Box sx={OVERLAY_LIST_SX}>
+                        {menuItems.map((item) => (
+                            <OverlayMenuItem
+                                key={item.id}
+                                item={item}
+                                isActive={activeItemId === item.id}
+                                onClick={handleItemClick}
+                            />
+                        ))}
+                    </Box>
+                </Box>
+            </Fade>
+
+            <Box
+                sx={{
+                    width: ICON_PANEL_WIDTH,
+                    minWidth: ICON_PANEL_WIDTH,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    py: 1,
+                    borderLeft: 1,
+                    borderColor: "divider",
+                    backgroundColor: "background.paper",
+                    position: "relative",
+                    zIndex: 2,
+                }}
+            >
+                <Tooltip title={isExpanded ? "Collapse panel" : "Expand panel"} placement="left">
+                    <IconButton size="small" onClick={onToggle} sx={{ mb: 0.5 }}>
+                        <MenuIcon fontSize="small" />
+                    </IconButton>
                 </Tooltip>
-            ))}
+
+                <Divider sx={{ width: "70%", my: 0.5 }} />
+
+                <Box sx={{ flex: 1, width: "100%", ...SCROLLBAR_STYLES }}>
+                    {menuItems.map((item) => (
+                        <RailMenuItem
+                            key={item.id}
+                            item={item}
+                            isActive={activeItemId === item.id}
+                            onClick={handleItemClick}
+                            overlayVisible={overlayVisible}
+                        />
+                    ))}
+                </Box>
+            </Box>
         </Box>
     )
 }
